@@ -41,7 +41,7 @@ app.use(cors());
 
 //My Routes
 app.use("/api", authRoute);
-// app.use("/api", userRoute);
+app.use("/api", userRoute);
 // app.use("/api", postRoute);
 
 

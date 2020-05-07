@@ -1,5 +1,7 @@
 // This route will handle SignUP, SignIN and SignOUT
 
+// COMPLETED
+
 var express = require("express");
 var router = express.Router();
 
