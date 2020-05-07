@@ -42,3 +42,22 @@ exports.createNewPost = (req,res) =>
     });
 
 }
+
+exports.expandPost = (req,res) =>
+{
+    let PostID = req.params.postID;
+    Post.findById(PostID,(err,post) =>{
+        if(err || !post)
+        {
+            return res.status(404).json(
+                {
+                    error: "POST NOT FOUND"
+                }
+            )
+        }
+        else
+        {
+            return res.json(post);
+        }
+    })
+}
