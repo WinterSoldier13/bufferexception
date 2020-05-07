@@ -18,7 +18,6 @@ let postSchema = new moongoose.Schema(
         postAuthor:
         {
             type: String,
-            required: true,
             trim: true
         },
         postReplies:
