@@ -3,7 +3,7 @@
 var express = require("express");
 var router = express.Router();
 
-const {getAllPosts, createNewPost, expandPost} = require('../controllers/postController');
+const {getAllPosts, createNewPost, expandPost, commentOnPost, getAllComments} = require('../controllers/postController');
 const {isSignedIn,isAuthenticated} = require("../controllers/authController");
 
 
@@ -20,5 +20,6 @@ router.put('/posts/newPost/:userID',isSignedIn, createNewPost) //Need to add isA
 router.get('/posts/:postID', expandPost);
 
 //commentOnAPost
+router.get('/posts/comment/:postID/:username', commentOnPost)
 
 module.exports = router;

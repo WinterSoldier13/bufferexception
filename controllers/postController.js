@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
+const Comment = require('../models/Comment');
 const {isSignedIn} = require("../controllers/authController");
 
 
@@ -50,15 +51,8 @@ exports.createNewPost = (req,res) =>
             )
         }
     });
-        // return res.send(posts)
-        // return res.send(user);
         
     })
-    // posts.push(x);
-
-    
-
-    
 
     newPost.save((err,post) =>{
         if(err)
@@ -94,4 +88,57 @@ exports.expandPost = (req,res) =>
             return res.json(post);
         }
     })
+}
+
+
+exports.commentOnPost = (req,res) =>
+{
+    const postID = req.params.postID;
+    const username = req.params.username;
+
+    let newComment = new Comment(req.body);
+    newComment.author = username;
+    newComment.postID = postID;
+    var commentID = newComment._id;
+
+    newComment.save((err,comment) => {
+        if(err)
+        {
+            return res.status(400).json(
+                {
+                    error: "Unable to create the comment"
+                }
+            )
+        }
+
+        Post.findById(postID,(err,post)=>
+        {
+            if(err)
+            {
+                return res.status(400);
+            }
+            var comments = post.postReplies;
+            comments.push(commentID)
+
+
+            Post.findByIdAndUpdate(postID,{"postReplies":comments},(err,com)=>
+            {
+                if(err)
+                {
+                    return res.send(err);
+                }
+                return res.json(com);
+            })
+        } )
+    })
+
+
+
+
+}
+
+exports.getAllComments = (req,res)=> 
+{
+
+
 }
