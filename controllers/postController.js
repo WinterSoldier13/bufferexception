@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const User = require('../models/User');
 const {isSignedIn} = require("../controllers/authController");
 
 
@@ -24,8 +25,41 @@ exports.getAllPosts = (req,res) =>
 exports.createNewPost = (req,res) =>
 {
     let UserID = req.params.userID;
+
     let newPost = new Post(req.body);
     newPost.postAuthor = UserID;
+    var posts =[];
+    var x =newPost._id;
+    User.findOne({"username": UserID},null, (err, user)=> {
+        if(err || !user)
+        {
+            return res.status(400).send("USER NOT FOUND");
+        }
+        // user.posts.push(newPost._id);
+        posts = user.posts;
+        posts.push(x);
+
+        User.findOneAndUpdate({"username": UserID}, {"posts": posts}, (err,user)=>
+        {
+        if(err || !user)
+        {
+            return res.status(400).json(
+                {
+                    error: "Unable to add post to the USER profile"
+                }
+            )
+        }
+    });
+        // return res.send(posts)
+        // return res.send(user);
+        
+    })
+    // posts.push(x);
+
+    
+
+    
+
     newPost.save((err,post) =>{
         if(err)
         {
